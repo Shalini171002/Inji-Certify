@@ -83,11 +83,11 @@ HTTP 201 Created
 
 🧑‍💻 Author
 
-**Shalini**
-A passionate Java Backend Developer ✨
+Shalini
+A passionate Java Backend Developer 
 [LinkedIn](https://www.linkedin.com/in/shalini-j-73aa4b213) 
 
----
+
 
 📄 License
 
