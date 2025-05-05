@@ -1,0 +1,40 @@
+name: Deploy Astro + Node.js
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: ./
+
+      - name: Build Astro Site
+        run: npm run build
+        working-directory: ./
+
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: ./backend
+
+      - name: Start backend server (for test only)
+        run: npm start &
+        working-directory: ./backend
+
+      - name: Run Lighthouse CI
+        run: npx @lhci/cli autorun
