@@ -1,40 +1,30 @@
-name: Deploy Astro + Node.js
+name: Deploy Astro site to GitHub Pages
 
 on:
   push:
-    branches: [main]
-  pull_request:
+    branches: [main]  # Change this if your default branch is not 'main'
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '18'  # Match your Astro version's Node requirement
 
-      - name: Install frontend dependencies
+      - name: Install dependencies
         run: npm install
-        working-directory: ./
 
-      - name: Build Astro Site
+      - name: Build site
         run: npm run build
-        working-directory: ./
 
-      - name: Install backend dependencies
-        run: npm install
-        working-directory: ./backend
-
-      - name: Start backend server (for test only)
-        run: npm start &
-        working-directory: ./backend
-
-      - name: Run Lighthouse CI
-        run: npx @lhci/cli autorun
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
